@@ -6,7 +6,7 @@ import java.sql.*;
 
 public class DBSetUp {
 
-    private static final String URL = "jdbc:h2:~/DineDashH2_2;AUTO_SERVER=TRUE";
+    private static final String URL ="jdbc:h2:file:./DineDashDB/usersdb";
 
     private static final String USERNAME = "sa";
     private static final String PASSWORD = "";

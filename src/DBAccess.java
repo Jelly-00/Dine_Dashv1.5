@@ -5,7 +5,7 @@ import java.util.List;
 public class DBAccess {
 
     // Database connection URL for H2 database
-    private static final String URL = "jdbc:h2:~/DineDashH2_2;AUTO_SERVER=TRUE";
+    private static final String URL = "jdbc:h2:file:./DineDashDB/usersdb";
 
     // Database username and password
     private static final String USERNAME = "sa";
