@@ -105,6 +105,75 @@ public class DBAccess {
         }
         return users;
     }
+    public  List<Restaurant> getAllRestaurants() {
+        List<Restaurant> restaurants = new ArrayList<>(); // List to store restaurants
+        String sql = "SELECT id, name, cuisine FROM restaurants"; // Corrected SQL query
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            // Execute the query and get the ResultSet
+
+            // rs.next() moves the cursor to the next row in the ResultSet
+            // It returns `true` if there is a next row, and `false` if there are no more rows
+            while (rs.next()) {
+                // rs.getInt("id"): Retrieves the value of the "id" column as an integer
+                // rs.getString("name"): Retrieves the value of the "name" column as a String
+                // rs.getString("cuisine"): Retrieves the value of the "cuisine" column as a String
+                restaurants.add(new Restaurant(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("cuisine")
+                ));
+            }
+        } catch (SQLException e) {
+            // Handle SQL errors
+            System.err.println("❌ Fetch restaurants error: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return restaurants;
+    }
+
+    public boolean deleteRestaurant(int id) {
+        String sql = "DELETE FROM restaurants WHERE id = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Error deleting restaurant: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean updateRestaurant(Restaurant updatedRestaurant) {
+        String sql = "UPDATE restaurants SET name = ?, cuisine = ? WHERE id = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, updatedRestaurant.getName());
+            stmt.setString(2, updatedRestaurant.getCuisine());
+            stmt.setInt(3, updatedRestaurant.getId());
+
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Error updating restaurant: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return false;
+    }
+    public boolean addRestaurant(Restaurant restaurant) {
+        String sql = "INSERT INTO restaurants (name, cuisine) VALUES (?, ?)";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, restaurant.getName());
+            stmt.setString(2, restaurant.getCuisine());
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Error adding restaurant: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return false;
+    }
 
     // Method to check if a username is unique
     public boolean isUserNameUnique(String username) {
@@ -279,4 +348,5 @@ public class DBAccess {
         }
         return false;
     }
+
 }

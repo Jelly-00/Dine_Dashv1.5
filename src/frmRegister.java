@@ -59,7 +59,7 @@ public class frmRegister extends JFrame {
         String password = new String(passwordField.getPassword());
         String confirmPassword = new String(confirmPasswordField.getPassword()); // Retrieve confirm password input
 
-// ✅ Step 1: Validate Inputs (Ensure No Null or Empty Values)
+
         if (username == null || username.trim().isEmpty()) {
             // Display error message if username is empty
             JOptionPane.showMessageDialog(this, "Username cannot be empty!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -84,14 +84,14 @@ public class frmRegister extends JFrame {
             return;
         }
 
-// ✅ Step 2: Validate Email Format (Basic Check)
+
         if (!email.contains("@") || !email.contains(".")) {
             //email validation
             JOptionPane.showMessageDialog(this, "Invalid email format!", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-// ✅ Step 3: Validate Password Fields
+
         if (password == null || password.trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Password cannot be empty!", "Error", JOptionPane.ERROR_MESSAGE);
             return;
@@ -102,19 +102,19 @@ public class frmRegister extends JFrame {
             return;
         }
 
-// ✅ Step 4: Ensure Password & Confirm Password Match
+
         if (!password.equals(confirmPassword)) {
             JOptionPane.showMessageDialog(this, "Passwords do not match!", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-// ✅ Step 5: Ensure Password Meets Security Requirements (At least 6 characters)
+
         if (password.length() < 8) {
             JOptionPane.showMessageDialog(this, "Password must be at least 6 characters long!", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-// ✅ Step 6: Check If Username or Email Already Exists in Database
+
         DBAccess db = DBAccess.getInstance();
 
         if (!db.isUserNameUnique(username)) {
@@ -123,15 +123,15 @@ public class frmRegister extends JFrame {
             return;
         }
 
-        // ✅ Step 7: Create a New User Object
+
         User newUser = new User(username, firstName, lastName, email, password) {
             @Override
             public String getRole() {
                 return "";
             }
-        };  // ⚠️ WARNING: Password should be hashed for security
+        };
 
-        // ✅ Step 8: Insert User into Database with Role "Customer"
+
         boolean userAdded = db.addUser(newUser, "Customer");
 
         if (userAdded) {

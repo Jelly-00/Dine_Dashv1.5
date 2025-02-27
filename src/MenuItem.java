@@ -6,7 +6,6 @@ public abstract class MenuItem
     private String name;
     private double price;
     private int quantity;
-    private String type;
     ;
 
     public MenuItem( int quantity, double price, String name, int menu_id) {
