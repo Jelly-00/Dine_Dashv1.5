@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
-public class frmListRestaurants extends JFrame {
+public class frmManageRestaurants extends JFrame {
     private JPanel panel1;
     private JTable tblListRes;
     private JButton btnAdd;
@@ -17,7 +17,7 @@ public class frmListRestaurants extends JFrame {
     private JLabel lblName;
     private JLabel lblCuisine;
 
-    public frmListRestaurants() {
+    public frmManageRestaurants() {
         setTitle("List of Restaurants");
         setContentPane(panel1);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -130,6 +130,6 @@ public class frmListRestaurants extends JFrame {
     }
 
     public static void main(String[] args) {
-        new frmListRestaurants();
+        new frmManageRestaurants();
     }
 }

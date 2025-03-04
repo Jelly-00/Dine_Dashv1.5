@@ -1,52 +1,39 @@
-public abstract class MenuItem
-{
-
+public abstract class MenuItem {
     private int id;
-    private int menu_id;
+    private int menuId;
     private String name;
     private double price;
-    private int quantity;
-    ;
+    private String description;
 
-    public MenuItem( int quantity, double price, String name, int menu_id) {
-
-        this.quantity = quantity;
-        this.price = price;
+    public MenuItem(int id, int menuId, String name, double price) {
+        this.id = id;
+        this.menuId = menuId;
         this.name = name;
-        this.menu_id = menu_id;
-
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public int getMenu_id() {
-        return menu_id;
-    }
-
-    public String getName() {
-        return name;
+        this.price = price;
+        this.description = "";
     }
 
     public int getId() {
         return id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public int getMenuId() {
+        return menuId;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public String getName() {
+        return name;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public double getPrice() {
+        return price;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
-

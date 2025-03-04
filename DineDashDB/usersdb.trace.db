@@ -15,8 +15,8 @@ SELECT id, name, cuisine_type FROM restaurants [42122-200]
 	at org.h2.jdbc.JdbcPreparedStatement.<init>(JdbcPreparedStatement.java:76)
 	at org.h2.jdbc.JdbcConnection.prepareStatement(JdbcConnection.java:352)
 	at DBAccess.getAllRestaurants(DBAccess.java:112)
-	at frmListRestaurants.loadRestaurantData(frmListRestaurants.java:18)
-	at frmListRestaurants.main(frmListRestaurants.java:38)
+	at frmManageRestaurants.loadRestaurantData(frmManageRestaurants.java:18)
+	at frmManageRestaurants.main(frmManageRestaurants.java:38)
 2025-02-26 19:43:10 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Column "CUISINE_TYPE" not found; SQL statement:
 SELECT id, name, cuisine_type FROM restaurants [42122-200]
@@ -34,6 +34,112 @@ SELECT id, name, cuisine_type FROM restaurants [42122-200]
 	at org.h2.jdbc.JdbcPreparedStatement.<init>(JdbcPreparedStatement.java:76)
 	at org.h2.jdbc.JdbcConnection.prepareStatement(JdbcConnection.java:352)
 	at DBAccess.getAllRestaurants(DBAccess.java:112)
-	at frmListRestaurants.loadRestaurantData(frmListRestaurants.java:27)
-	at frmListRestaurants.<init>(frmListRestaurants.java:18)
-	at frmListRestaurants.main(frmListRestaurants.java:47)
+	at frmManageRestaurants.loadRestaurantData(frmManageRestaurants.java:27)
+	at frmManageRestaurants.<init>(frmManageRestaurants.java:18)
+	at frmManageRestaurants.main(frmManageRestaurants.java:47)
+2025-02-27 16:56:24 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Column "quantity" not found [42122-200]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:453)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:429)
+	at org.h2.message.DbException.get(DbException.java:205)
+	at org.h2.message.DbException.get(DbException.java:181)
+	at org.h2.jdbc.JdbcResultSet.getColumnIndex(JdbcResultSet.java:3169)
+	at org.h2.jdbc.JdbcResultSet.get(JdbcResultSet.java:3268)
+	at org.h2.jdbc.JdbcResultSet.getInt(JdbcResultSet.java:352)
+	at DBAccess.getMenuItemsByRestaurantId(DBAccess.java:363)
+	at frmBrowseRestaurants.loadMenuItems(frmBrowseRestaurants.java:71)
+	at frmBrowseRestaurants$1.actionPerformed(frmBrowseRestaurants.java:35)
+	at java.desktop/javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:1972)
+	at java.desktop/javax.swing.AbstractButton$Handler.actionPerformed(AbstractButton.java:2314)
+	at java.desktop/javax.swing.DefaultButtonModel.fireActionPerformed(DefaultButtonModel.java:407)
+	at java.desktop/javax.swing.DefaultButtonModel.setPressed(DefaultButtonModel.java:262)
+	at java.desktop/javax.swing.plaf.basic.BasicButtonListener.mouseReleased(BasicButtonListener.java:279)
+	at java.desktop/java.awt.Component.processMouseEvent(Component.java:6621)
+	at java.desktop/javax.swing.JComponent.processMouseEvent(JComponent.java:3404)
+	at java.desktop/java.awt.Component.processEvent(Component.java:6386)
+	at java.desktop/java.awt.Container.processEvent(Container.java:2266)
+	at java.desktop/java.awt.Component.dispatchEventImpl(Component.java:4996)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2324)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4828)
+	at java.desktop/java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4948)
+	at java.desktop/java.awt.LightweightDispatcher.processMouseEvent(Container.java:4575)
+	at java.desktop/java.awt.LightweightDispatcher.dispatchEvent(Container.java:4516)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2310)
+	at java.desktop/java.awt.Window.dispatchEventImpl(Window.java:2780)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4828)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:775)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:720)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:714)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:87)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:98)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:747)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:745)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:87)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:744)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+2025-03-01 21:29:23 database: flush
+org.h2.message.DbException: General error: "java.lang.IllegalStateException: The file is locked: nio:C:/Users/jorda/IdeaProjects/Dine_Dashv1.2/DineDashDB/usersdb.mv.db [1.4.200/7]" [50000-200]
+	at org.h2.message.DbException.get(DbException.java:194)
+	at org.h2.message.DbException.convert(DbException.java:347)
+	at org.h2.mvstore.db.MVTableEngine$1.uncaughtException(MVTableEngine.java:93)
+	at org.h2.mvstore.MVStore.handleException(MVStore.java:2877)
+	at org.h2.mvstore.MVStore.panic(MVStore.java:481)
+	at org.h2.mvstore.MVStore.<init>(MVStore.java:402)
+	at org.h2.mvstore.MVStore$Builder.open(MVStore.java:3579)
+	at org.h2.mvstore.db.MVTableEngine$Store.open(MVTableEngine.java:170)
+	at org.h2.mvstore.db.MVTableEngine.init(MVTableEngine.java:103)
+	at org.h2.engine.Database.getPageStore(Database.java:2659)
+	at org.h2.engine.Database.open(Database.java:675)
+	at org.h2.engine.Database.openDatabase(Database.java:307)
+	at org.h2.engine.Database.<init>(Database.java:301)
+	at org.h2.engine.Engine.openSession(Engine.java:74)
+	at org.h2.engine.Engine.openSession(Engine.java:192)
+	at org.h2.engine.Engine.createSessionAndValidate(Engine.java:171)
+	at org.h2.engine.Engine.createSession(Engine.java:166)
+	at org.h2.engine.Engine.createSession(Engine.java:29)
+	at org.h2.engine.SessionRemote.connectEmbeddedOrServer(SessionRemote.java:340)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:173)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:152)
+	at org.h2.Driver.connect(Driver.java:69)
+	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:682)
+	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:230)
+	at DBAccess.connect(DBAccess.java:59)
+	at DBAccess.<init>(DBAccess.java:22)
+	at DBAccess.getInstance(DBAccess.java:28)
+	at frmManageUsers.loadUserData(frmManageUsers.java:138)
+	at frmManageUsers.<init>(frmManageUsers.java:34)
+	at frmManageUsers.main(frmManageUsers.java:162)
+Caused by: org.h2.jdbc.JdbcSQLNonTransientException: General error: "java.lang.IllegalStateException: The file is locked: nio:C:/Users/jorda/IdeaProjects/Dine_Dashv1.2/DineDashDB/usersdb.mv.db [1.4.200/7]" [50000-200]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:505)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:429)
+	... 30 more
+Caused by: java.lang.IllegalStateException: The file is locked: nio:C:/Users/jorda/IdeaProjects/Dine_Dashv1.2/DineDashDB/usersdb.mv.db [1.4.200/7]
+	at org.h2.mvstore.DataUtils.newIllegalStateException(DataUtils.java:950)
+	at org.h2.mvstore.FileStore.open(FileStore.java:172)
+	at org.h2.mvstore.MVStore.<init>(MVStore.java:381)
+	... 24 more
+2025-03-04 19:53:47 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "
+('Admin123'[*],'Jordan', 'Admin', 'Admin', 'admin@mail.com', 'hashed_password', 'Admin',-1)"; expected "(, WITH, SELECT, TABLE, VALUES"; SQL statement:
+
+('Admin123','Jordan', 'Admin', 'Admin', 'admin@mail.com', 'hashed_password', 'Admin',-1) [42001-200]
+2025-03-04 19:54:56 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "
+('Admin123'[*],'Jordan', 'Admin', 'Admin', 'admin@mail.com', 'password', 'Admin',-1)"; expected "(, WITH, SELECT, TABLE, VALUES"; SQL statement:
+
+('Admin123','Jordan', 'Admin', 'Admin', 'admin@mail.com', 'password', 'Admin',-1) [42001-200]
+2025-03-04 20:22:31 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "
+('Admin123'[*],'Jordan', 'Admin', 'Admin', 'admin@mail.com', 'password', 'Admin',-1)"; expected "(, WITH, SELECT, TABLE, VALUES"; SQL statement:
+
+('Admin123','Jordan', 'Admin', 'Admin', 'admin@mail.com', 'password', 'Admin',-1) [42001-200]
+2025-03-04 20:26:19 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "PRICE DECIMAL(5, 2)": "3434.00 (6)"; SQL statement:
+INSERT INTO menu_items (menu_id, name, price, type, description, serving_size, is_alcoholic) VALUES (?, ?, ?, ?, ?, ?, ?) [22001-200]

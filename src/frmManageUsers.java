@@ -2,7 +2,6 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.List;
 
 public class frmManageUsers extends JFrame {
@@ -23,6 +22,8 @@ public class frmManageUsers extends JFrame {
     private JLabel lblLastName;
     private JLabel lblEmail;
     private JLabel lblPassword;
+    private JLabel lblRole;
+    private JComboBox cmbRole;
 
     public frmManageUsers() {
         this.setTitle("manageUser");
@@ -40,6 +41,7 @@ public class frmManageUsers extends JFrame {
                 String lastName = txtLastName.getText();
                 String email = txtEmail.getText();
                 String password = new String(txtPassword.getPassword());
+
 
                 if (username.isEmpty() || firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Please fill all fields");
@@ -132,7 +134,7 @@ public class frmManageUsers extends JFrame {
 
     public void loadUserData() {
         DefaultTableModel model = new DefaultTableModel();
-        model.setColumnIdentifiers(new String[]{"ID", "Username", "First Name", "Last Name", "Email"});
+        model.setColumnIdentifiers(new String[]{"ID", "Username", "First Name", "Last Name", "Email", "Password","Role"});
 
         try {
             DBAccess db = DBAccess.getInstance();
@@ -147,6 +149,7 @@ public class frmManageUsers extends JFrame {
                         user.getLastName(),
                         user.getEmail(),
                         user.getPassword(),
+                        user.getRole()
                 });
             }
         } catch (Exception e) {
@@ -157,6 +160,7 @@ public class frmManageUsers extends JFrame {
         tblUsers.revalidate();
         tblUsers.repaint();
     }
+
 
     public static void main(String[] args) {
         new frmManageUsers();

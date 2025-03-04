@@ -49,7 +49,7 @@ public class frmLogin extends JFrame {
             dispose();
             User loggedInUser = db.getUser(username);
             JOptionPane.showMessageDialog(this, "Welcome, " + loggedInUser.getFirstName() + " " + loggedInUser.getLastName() + "!", "Welcome", JOptionPane.INFORMATION_MESSAGE);
-            new HomePage(loggedInUser);
+            new frmHomePage(loggedInUser);
            // new frmHomePage(loggedInUser);
         } else {
             JOptionPane.showMessageDialog(this, "Invalid username or password.", "Error", JOptionPane.ERROR_MESSAGE);

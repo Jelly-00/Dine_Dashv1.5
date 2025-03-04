@@ -1,21 +1,22 @@
 public class RestaurantStaff extends User {
+    private int restaurantId;
 
-    private int rid;
-    public RestaurantStaff(int id, String userName, String firstName, String lastName, String email, String password, int rid) {
+
+    public RestaurantStaff(int id, String userName, String firstName, String lastName, String email, String password, int restaurantId) {
         super(id, userName, firstName, lastName, email, password);
-        this.rid = rid;
-    }
-
-    public RestaurantStaff(String userName, String firstName, String lastName, String email, String password) {
-        super(userName, firstName, lastName, email, password);
-    }
-
-    public int getRid() {
-        return rid;
+        this.restaurantId = restaurantId;
     }
 
     @Override
     public String getRole() {
-        return "Restaurant";
+        return "Staff";
+    }
+
+    public int getRestaurantId() {
+        return restaurantId;
+    }
+
+    public void setRestaurantId(int restaurantId) {
+        this.restaurantId = restaurantId;
     }
 }
