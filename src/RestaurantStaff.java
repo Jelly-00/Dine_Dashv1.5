@@ -18,4 +18,5 @@ public class RestaurantStaff extends User {
     public void setRestaurantId(int restaurantId) {
         this.restaurantId = restaurantId;
     }
+
 }

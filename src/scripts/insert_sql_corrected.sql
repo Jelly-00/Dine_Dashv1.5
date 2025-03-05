@@ -2,9 +2,10 @@
 
 -- Insert Users
 INSERT INTO users (username, first_name, last_name, email, password, role, restaurant_id) VALUES
-('jd123','John', 'Doe', 'john@example.com', 'password', 'Staff', -1),
+('staff','John', 'Doe', 'john@example.com', 'password', 'Staff', -1),
+('admin123','Admin', 'User', 'admin@mail.com', 'password', 'Admin', -1),
 ('as123','Alice', 'Smith', 'alice@example.com', 'hashed_password', 'Admin', -1),
-('staff123','Owner', 'Pizza Place', 'owner@pizza.com', 'hashed_password', 'Restaurant',1);
+('staff123','Owner', 'Pizza Place', 'owner@pizza.com', 'password', 'Restaurant',-1);
 
 -- Insert Restaurants
 INSERT INTO restaurants (name, cuisine) VALUES

@@ -10,6 +10,7 @@ public class frmHomePage extends JFrame {
     private JButton btnBrowse;
     private JButton btnAdmin;
     private JButton btnRestaurantManage;
+    private JButton btnChangePassword;
     private User loggedUser;
 
     public frmHomePage(User loggedUser) {
@@ -84,6 +85,15 @@ public class frmHomePage extends JFrame {
                             JOptionPane.ERROR_MESSAGE
                     );
                 }
+            }
+        });
+        btnChangePassword = new JButton("Change Password");
+        pnlContent.add(btnChangePassword);
+
+        btnChangePassword.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new frmChangePassword(loggedUser);
             }
         });
     }
