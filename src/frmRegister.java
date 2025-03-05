@@ -137,7 +137,7 @@ public class frmRegister extends JFrame {
         if (userAdded) {
             JOptionPane.showMessageDialog(this, "User registered successfully!");
             new frmLogin();
-          //  dispose(); // ✅ Close the registration form after success
+            //  dispose(); // ✅ Close the registration form after success
         } else {
             JOptionPane.showMessageDialog(this, "An error occurred with registration. Please try again.");
 

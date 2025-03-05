@@ -143,3 +143,5 @@ org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "
 2025-03-04 20:26:19 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLDataException: Value too long for column "PRICE DECIMAL(5, 2)": "3434.00 (6)"; SQL statement:
 INSERT INTO menu_items (menu_id, name, price, type, description, serving_size, is_alcoholic) VALUES (?, ?, ?, ?, ?, ?, ?) [22001-200]
+2025-03-04 23:52:02 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-200]

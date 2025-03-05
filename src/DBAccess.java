@@ -260,28 +260,28 @@ public class DBAccess {
                 // If a row exists, create a User object
                 if (rs.next()) {
                     switch (rs.getString("role").toLowerCase()) {
-                      case "customer":
+                        case "customer":
 
-                          return new Customer(
-                                  rs.getInt("id"),
-                                  rs.getString("username"),
-                                  rs.getString("first_name"),
-                                  rs.getString("last_name"),
-                                  rs.getString("email"),
-                                  rs.getString("password") // Not masking password
-                          );
+                            return new Customer(
+                                    rs.getInt("id"),
+                                    rs.getString("username"),
+                                    rs.getString("first_name"),
+                                    rs.getString("last_name"),
+                                    rs.getString("email"),
+                                    rs.getString("password") // Not masking password
+                            );
 
-                      case "staff":
+                        case "staff":
 
-                          return new RestaurantStaff(
-                                  rs.getInt("id"),
-                                  rs.getString("username"),
-                                  rs.getString("first_name"),
-                                  rs.getString("last_name"),
-                                  rs.getString("email"),
-                                  rs.getString("password") ,
-                                  rs.getInt("restaurant_id")// Not masking password
-                          );
+                            return new RestaurantStaff(
+                                    rs.getInt("id"),
+                                    rs.getString("username"),
+                                    rs.getString("first_name"),
+                                    rs.getString("last_name"),
+                                    rs.getString("email"),
+                                    rs.getString("password") ,
+                                    rs.getInt("restaurant_id")// Not masking password
+                            );
 
                         case "admin":
                             return new Admin(
@@ -294,15 +294,15 @@ public class DBAccess {
                             );
 
 
+                    }
                 }
+            } catch (SQLException e) {
+                // Handle SQL errors
+                System.err.println("❌ Authentication error: " + e.getMessage());
+                e.printStackTrace();
             }
+            return null; // Return null if the user is not found
         } catch (SQLException e) {
-            // Handle SQL errors
-            System.err.println("❌ Authentication error: " + e.getMessage());
-            e.printStackTrace();
-        }
-        return null; // Return null if the user is not found
-    } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 

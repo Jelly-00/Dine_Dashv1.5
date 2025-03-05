@@ -8,7 +8,7 @@ public class frmManageUsers extends JFrame {
     private JTable tblUsers;
     private JPanel pnlContent;
     private JPanel pnlInputFields;
-    private JTextField txtUsername;
+    private JTextField txtUserName;
     private JTextField txtFirstName;
     private JTextField txtLastName;
     private JTextField txtEmail;
@@ -17,7 +17,7 @@ public class frmManageUsers extends JFrame {
     private JButton btnAddUser;
     private JButton btnEditUser;
     private JButton btnDeleteUser;
-    private JLabel lblUsername;
+    private JLabel lblUserName;
     private JLabel lblFirstName;
     private JLabel lblLastName;
     private JLabel lblEmail;
@@ -36,7 +36,7 @@ public class frmManageUsers extends JFrame {
         btnAddUser.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String username = txtUsername.getText();
+                String username = txtUserName.getText();
                 String firstName = txtFirstName.getText();
                 String lastName = txtLastName.getText();
                 String email = txtEmail.getText();
@@ -80,7 +80,7 @@ public class frmManageUsers extends JFrame {
                 }
 
                 int id = (int) tblUsers.getValueAt(selectedRow, 0);
-                String username = txtUsername.getText();
+                String username = txtUserName.getText();
                 String firstName = txtFirstName.getText();
                 String lastName = txtLastName.getText();
                 String email = txtEmail.getText();

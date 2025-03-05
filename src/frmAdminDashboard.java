@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.sql.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -7,6 +8,8 @@ public class frmAdminDashboard extends JFrame {
     private JLabel lblWelcome;
     private JButton btnMangeUsers;
     private JButton btnManageRestuarants;
+    private JLabel lblUserCount;
+    private JLabel lblRestaurantCount;
     private User loggedUser;
 
     public frmAdminDashboard(User user) {
@@ -17,7 +20,6 @@ public class frmAdminDashboard extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(600, 400);
         setLocationRelativeTo(null);
-        setVisible(true);
 
         // Ensure loggedUser is initialized before using it
         if (loggedUser != null) {
@@ -25,6 +27,9 @@ public class frmAdminDashboard extends JFrame {
         } else {
             lblWelcome.setText("Welcome, Admin");
         }
+
+        // Load and display system statistics
+        loadSystemStatistics();
 
         btnMangeUsers.addActionListener(new ActionListener() {
             @Override
@@ -39,6 +44,52 @@ public class frmAdminDashboard extends JFrame {
                 new frmManageRestaurants();
             }
         });
+
+        setVisible(true);
+    }
+
+    private void loadSystemStatistics() {
+        DBAccess db = DBAccess.getInstance();
+
+        // Get user count
+        int userCount = getUserCount(db);
+        lblUserCount.setText("Total Users: " + userCount);
+
+        // Get restaurant count
+        int restaurantCount = getRestaurantCount(db);
+        lblRestaurantCount.setText("Total Restaurants: " + restaurantCount);
+    }
+
+    private int getUserCount(DBAccess db) {
+        int count = 0;
+        try (Connection conn = db.getConnection();
+             PreparedStatement stmt = conn.prepareStatement("SELECT COUNT(*) FROM users");
+             ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error fetching user count: " + e.getMessage(),
+                    "Database Error", JOptionPane.ERROR_MESSAGE);
+        }
+        return count;
+    }
+
+    private int getRestaurantCount(DBAccess db) {
+        int count = 0;
+        try (Connection conn = db.getConnection();
+             PreparedStatement stmt = conn.prepareStatement("SELECT COUNT(*) FROM restaurants");
+             ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error fetching restaurant count: " + e.getMessage(),
+                    "Database Error", JOptionPane.ERROR_MESSAGE);
+        }
+        return count;
     }
 
     // Constructor for testing without a user
@@ -48,9 +99,11 @@ public class frmAdminDashboard extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(600, 400);
         setLocationRelativeTo(null);
-        setVisible(true);
 
         lblWelcome.setText("Welcome, Admin");
+
+        // Load and display system statistics
+        loadSystemStatistics();
 
         btnMangeUsers.addActionListener(new ActionListener() {
             @Override
@@ -65,6 +118,8 @@ public class frmAdminDashboard extends JFrame {
                 new frmManageRestaurants();
             }
         });
+
+        setVisible(true);
     }
 
     public static void main(String[] args) {
