@@ -49,7 +49,7 @@ public class frmEditMenu extends JFrame {
     }
 
     private void initializeComponents() {
-        // Setup table model
+
         String[] columnNames = {"ID", "Name", "Price", "Type", "Description"};
         tableModel = new DefaultTableModel(columnNames, 0) {
             @Override
@@ -61,11 +61,11 @@ public class frmEditMenu extends JFrame {
         tblMenuItems.getColumnModel().getColumn(0).setMinWidth(0);
         tblMenuItems.getColumnModel().getColumn(0).setMaxWidth(0);
 
-        // Setup type combo box
+
         cmbType.addItem("Food");
         cmbType.addItem("Drink");
 
-        // Initial visibility for type-specific fields
+
         updateTypeSpecificFields();
     }
 
@@ -125,7 +125,7 @@ public class frmEditMenu extends JFrame {
             cmbType.setSelectedItem(type);
             txtDescription.setText(description);
 
-            // Get the complete item to access type-specific properties
+
             List<MenuItem> items = db.getMenuItemsByRestaurantId(restaurantId);
             for (MenuItem item : items) {
                 if (item.getId() == itemId) {

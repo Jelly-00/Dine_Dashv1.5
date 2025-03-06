@@ -1,5 +1,4 @@
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -11,96 +10,62 @@ public class frmHomePage extends JFrame {
     private JButton btnAdmin;
     private JButton btnRestaurantManage;
     private JButton btnChangePassword;
-    private User loggedUser;
+    private JButton btnLogout;
 
-    public frmHomePage(User loggedUser) {
-        this.loggedUser = loggedUser;
-
-        // Set up frame
-        setTitle("Home");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    public frmHomePage(User loggedInUser) {
+        setTitle("Home Page");
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setContentPane(pnlContent);
-        setSize(800, 600);
+        setSize(600, 800);
         setLocationRelativeTo(null);
-
-        // Set welcome message
-        lblWelcome.setText("Welcome " + loggedUser.getFirstName() + " " + loggedUser.getLastName());
-
-        // Set up logo
-        lblLogo.setHorizontalAlignment(SwingConstants.CENTER);
-        lblLogo.setPreferredSize(new Dimension(400, 300));
-
-        // Configure button visibility based on user role
-        setupButtonVisibility();
-
-        // Add action listeners to buttons
-        setupActionListeners();
-
-        // Show the frame
         setVisible(true);
-    }
 
-    private void setupButtonVisibility() {
-        String userRole = loggedUser.getRole();
+        lblWelcome.setText("Welcome, " + loggedInUser.getFirstName() + " " + loggedInUser.getLastName());
 
-        // Admin button is only visible for Admin users
-        btnAdmin.setVisible("Admin".equals(userRole));
-        btnAdmin.setEnabled("Admin".equals(userRole));
-
-        // Restaurant Management button is only visible for Staff
-        btnRestaurantManage.setVisible("Staff".equals(userRole));
-        btnRestaurantManage.setEnabled("Staff".equals(userRole));
-    }
-
-    private void setupActionListeners() {
-        // Browse button action
-        btnBrowse.addActionListener(e -> {
-            new frmBrowseRestaurants();
-        });
-
-        // Admin button action
-        btnAdmin.addActionListener(e -> {
-            if (loggedUser != null && "Admin".equals(loggedUser.getRole())) {
-                new frmAdminDashboard(loggedUser);
-            } else {
-                JOptionPane.showMessageDialog(
-                        frmHomePage.this,
-                        "You do not have permission to access the Admin Dashboard.",
-                        "Access Denied",
-                        JOptionPane.ERROR_MESSAGE
-                );
+        btnBrowse.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new frmBrowseRestaurants();
             }
         });
 
-        // Restaurant Management button action
-        btnRestaurantManage.addActionListener(e -> {
-            if (loggedUser != null && "Staff".equals(loggedUser.getRole())) {
-                RestaurantStaff staffUser = (RestaurantStaff) loggedUser;
-                int restaurantId = staffUser.getRestaurantId();
-
-                if (restaurantId > 0) {
-                    new frmEditMenu(restaurantId);
-                } else {
-                    JOptionPane.showMessageDialog(
-                            frmHomePage.this,
-                            "You are not associated with any restaurant.",
-                            "Restaurant Not Found",
-                            JOptionPane.WARNING_MESSAGE
-                    );
-                }
-            } else {
-                JOptionPane.showMessageDialog(
-                        frmHomePage.this,
-                        "You do not have permission to manage restaurant menus.",
-                        "Access Denied",
-                        JOptionPane.ERROR_MESSAGE
-                );
+        btnAdmin.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new frmAdminDashboard(loggedInUser);
             }
         });
 
-        // Change Password button action
-        btnChangePassword.addActionListener(e -> {
-            new frmChangePassword(loggedUser);
+        btnRestaurantManage.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new frmManageRestaurants();
+            }
         });
+
+        btnChangePassword.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new frmChangePassword(loggedInUser);
+            }
+        });
+
+        btnLogout.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                logout();
+            }
+        });
+    }
+
+    private void logout() {
+        JOptionPane.showMessageDialog(this, "You have been logged out.", "Logout", JOptionPane.INFORMATION_MESSAGE);
+        dispose();
+        new frmLogin();
+    }
+
+    public static void main(String[] args) {
+        User testUser = new Customer("testUser", "Test", "User", "test@example.com", "password");
+        new frmHomePage(testUser);
     }
 }

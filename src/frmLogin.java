@@ -9,6 +9,7 @@ public class frmLogin extends JFrame {
     private JPasswordField passwordField;
     private JButton loginButton;
     private JButton btnHome;
+    private JButton btnChangePassword;
 
     public frmLogin() {
         setTitle("Login Page");
@@ -33,15 +34,20 @@ public class frmLogin extends JFrame {
                 new frmTest();
             }
         });
+        btnChangePassword.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                User testUser = new Customer("testUser", "Test", "User", "test@example.com", "password");
+                new frmChangePassword(testUser);
+            }
+        });
     }
 
     private void loginUser() {
         String username = usernameField.getText();
         String password = new String(passwordField.getPassword());
 
-        // get db connection
         DBAccess db = DBAccess.getInstance();
-        //call method to authenticate user
         boolean isAuthenticated = db.authenticateUser(username, password);
 
         if (isAuthenticated) {
