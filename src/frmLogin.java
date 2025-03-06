@@ -15,8 +15,8 @@ public class frmLogin extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setContentPane(pnlContent);
         setSize(600, 800);
-        pnlContent.setPreferredSize(new Dimension(600, 800)); // Set preferred size for the main panel
-        pack(); // Resize the frame to fit the preferred size of its components
+        pnlContent.setPreferredSize(new Dimension(600, 800));
+        pack();
 
         setLocationRelativeTo(null);
         setVisible(true);
@@ -47,9 +47,9 @@ public class frmLogin extends JFrame {
         if (isAuthenticated) {
             JOptionPane.showMessageDialog(this, "Login successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
             dispose();
-            User loggedUser = db.getUser(username);
-            JOptionPane.showMessageDialog(this, "Welcome, " + loggedUser.getFirstName() + " " + loggedUser.getLastName() + "!", "Welcome", JOptionPane.INFORMATION_MESSAGE);
-            new frmHomePage(loggedUser);
+            User loggedInUser = db.getUser(username);
+            JOptionPane.showMessageDialog(this, "Welcome, " + loggedInUser.getFirstName() + " " + loggedInUser.getLastName() + "!", "Welcome", JOptionPane.INFORMATION_MESSAGE);
+            new frmHomePage(loggedInUser);
         } else {
             JOptionPane.showMessageDialog(this, "Invalid username or password.", "Error", JOptionPane.ERROR_MESSAGE);
         }

@@ -5,6 +5,7 @@ public abstract class User {
     private String lastName;
     private String email;
     private String password;
+    private String Role;
 
     public User(String userName, String firstName, String lastName, String email, String password) {
         this.userName = userName;
@@ -59,5 +60,7 @@ public abstract class User {
                 '}';
     }
 
-    public abstract String getRole();
+    public  String getRole(){
+        return Role;
+    }
 }

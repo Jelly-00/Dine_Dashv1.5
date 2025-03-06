@@ -25,21 +25,30 @@ public class frmManageRestaurants extends JFrame {
         setVisible(true);
 
         loadRestaurantData();
+        // LISTENER TO POPULATE TEXT FIELDS WHEN A ROW IS SELECTED
+        tblListRes.getSelectionModel().addListSelectionListener(event -> {
+            if (!event.getValueIsAdjusting() && tblListRes.getSelectedRow() != -1) {
+                int selectedRow = tblListRes.getSelectedRow();
+                int id = (int) tblListRes.getValueAt(selectedRow, 0);
+                String name = (String) tblListRes.getValueAt(selectedRow, 1);
+                String cuisine = (String) tblListRes.getValueAt(selectedRow, 2);
+                txtId.setText(String.valueOf(id));
+                txtName.setText(name);
+                txtCuisine.setText(cuisine);
+            }
+        });
 
         btnDelete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int selectedRow = tblListRes.getSelectedRow();
-
                 if (selectedRow == -1) {
                     JOptionPane.showMessageDialog(null, "Please select a restaurant.");
                     return;
                 }
-
                 int id = (int) tblListRes.getValueAt(selectedRow, 0);
                 DBAccess dbAccess = DBAccess.getInstance();
                 boolean isDeleted = dbAccess.deleteRestaurant(id);
-
                 if (isDeleted) {
                     JOptionPane.showMessageDialog(null, "Restaurant deleted successfully.");
                     loadRestaurantData();
@@ -53,24 +62,19 @@ public class frmManageRestaurants extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int selectedRow = tblListRes.getSelectedRow();
-
                 if (selectedRow == -1) {
                     JOptionPane.showMessageDialog(null, "Please select a restaurant");
                     return;
                 }
-
                 int id = (int) tblListRes.getValueAt(selectedRow, 0);
                 String name = txtName.getText();
                 String cuisine = txtCuisine.getText();
-
                 if (name.isEmpty() || cuisine.isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Please fill all the fields");
                     return;
                 }
-
                 Restaurant updatedRestaurant = new Restaurant(id, name, cuisine);
                 DBAccess dbAccess = DBAccess.getInstance();
-
                 if (dbAccess.updateRestaurant(updatedRestaurant)) {
                     JOptionPane.showMessageDialog(null, "Restaurant updated");
                     loadRestaurantData();
@@ -79,21 +83,18 @@ public class frmManageRestaurants extends JFrame {
                 }
             }
         });
+
         btnAdd.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String name = txtName.getText();
                 String cuisine = txtCuisine.getText();
-
                 if (name.isEmpty() || cuisine.isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Please fill all fields");
                     return;
                 }
-
                 DBAccess dbAccess = DBAccess.getInstance();
-
                 Restaurant newRestaurant = new Restaurant(0, name, cuisine);
-
                 if (dbAccess.addRestaurant(newRestaurant)) {
                     JOptionPane.showMessageDialog(null, "Restaurant added successfully");
                     loadRestaurantData();
@@ -105,14 +106,13 @@ public class frmManageRestaurants extends JFrame {
     }
 
     public void loadRestaurantData() {
+        // USES THE DB ACCESS SINGLETON TO GET ALL RESTAURANTS
         DefaultTableModel model = new DefaultTableModel();
         model.setColumnIdentifiers(new String[]{"ID", "Name", "Cuisine Type"});
-
         try {
             DBAccess db = DBAccess.getInstance();
             List<Restaurant> restaurants = db.getAllRestaurants();
             model.setRowCount(0);
-
             for (Restaurant restaurant : restaurants) {
                 model.addRow(new Object[]{
                         restaurant.getId(),

@@ -58,7 +58,7 @@ public class DBAccess {
                 });
             }
         } catch (SQLException e) {
-            System.err.println("❌ Fetch users error: " + e.getMessage());
+            System.err.println(" Fetch users error: " + e.getMessage());
             e.printStackTrace();
         }
         return users;
@@ -80,7 +80,7 @@ public class DBAccess {
                 ));
             }
         } catch (SQLException e) {
-            System.err.println("❌ Fetch restaurants error: " + e.getMessage());
+            System.err.println(" Fetch restaurants error: " + e.getMessage());
             e.printStackTrace();
         }
         return restaurants;
@@ -140,7 +140,7 @@ public class DBAccess {
                 }
             }
         } catch (SQLException e) {
-            System.err.println("❌ Username check error: " + e.getMessage());
+            System.err.println(" Username check error: " + e.getMessage());
             e.printStackTrace();
         }
         return false;
@@ -157,7 +157,7 @@ public class DBAccess {
                 return rs.next() && rs.getInt(1) > 0;
             }
         } catch (SQLException e) {
-            System.err.println("❌ Authentication error: " + e.getMessage());
+            System.err.println(" Authentication error: " + e.getMessage());
             e.printStackTrace();
         }
         return false;
@@ -176,7 +176,7 @@ public class DBAccess {
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
         } catch (SQLException e) {
-            System.err.println("❌ Add user error: " + e.getMessage());
+            System.err.println(" Add user error: " + e.getMessage());
             e.printStackTrace();
         }
         return false;
@@ -221,7 +221,7 @@ public class DBAccess {
                     }
                 }
             } catch (SQLException e) {
-                System.err.println("❌ Authentication error: " + e.getMessage());
+                System.err.println(" Authentication error: " + e.getMessage());
                 e.printStackTrace();
             }
             return null;
@@ -459,7 +459,7 @@ public class DBAccess {
                 ));
             }
         } catch (SQLException e) {
-            System.err.println("❌ Fetch staff members error: " + e.getMessage());
+            System.err.println("Fetch staff members error: " + e.getMessage());
             e.printStackTrace();
         }
         return staffMembers;
@@ -480,7 +480,7 @@ public class DBAccess {
                 }
             }
         } catch (SQLException e) {
-            System.err.println("❌ Error fetching restaurant by name: " + e.getMessage());
+            System.err.println(" Error fetching restaurant by name: " + e.getMessage());
             e.printStackTrace();
         }
         return null;

@@ -4,7 +4,6 @@ public class Users {
     private DBAccess dbAccess;
 
     public Users() {
-
         dbAccess = DBAccess.getInstance(); // Get database instance
     }
 
@@ -23,7 +22,8 @@ public class Users {
         }
 
         // Insert into the database
-        boolean inserted = dbAccess.addUser(user,"Customer");
+        String role = user.getRole(); // Get the role from the User object
+        boolean inserted = dbAccess.addUser(user, role);
         if (inserted) {
             System.out.println("✅ User added successfully!");
         } else {

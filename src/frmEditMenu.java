@@ -1,29 +1,35 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 
 public class frmEditMenu extends JFrame {
     private JPanel pnlContent;
     private JTable tblMenuItems;
-    private JButton btnAddItem;
-    private JButton btnEditItem;
-    private JButton btnDeleteItem;
-    private JButton btnBack;
-    private DefaultTableModel tableModel;
     private JPanel pnlInputFields;
     private JTextField txtName;
     private JTextField txtPrice;
-    private JTextField txtDescription;
     private JComboBox<String> cmbType;
+    private JTextField txtDescription;
     private JTextField txtServingSize;
     private JCheckBox chkAlcoholic;
+    private JButton btnAddItem;
+    private JButton btnEditItem;
+    private JButton btnDeleteItem;
     private JPanel pnlButtons;
+    private JButton btnBack;
 
     private int restaurantId;
     private DBAccess db;
+    private DefaultTableModel tableModel;
+
+    // Default constructor - shows error message when no restaurant ID is provided
+    public frmEditMenu() {
+        JOptionPane.showMessageDialog(null,
+                "No restaurant ID provided. Please login as restaurant staff.",
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+        dispose();
+    }
 
     public frmEditMenu(int restaurantId) {
         this.restaurantId = restaurantId;
@@ -31,274 +37,238 @@ public class frmEditMenu extends JFrame {
 
         setTitle("Edit Restaurant Menu");
         setContentPane(pnlContent);
-        setSize(800, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setSize(800, 600);
         setLocationRelativeTo(null);
 
-        initializeTable();
+        initializeComponents();
+        setupListeners();
         loadMenuItems();
-
-        btnAddItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                showItemDialog(null); // Pass null for new item
-            }
-        });
-
-        btnEditItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int selectedRow = tblMenuItems.getSelectedRow();
-                if (selectedRow >= 0) {
-                    int itemId = (int) tableModel.getValueAt(selectedRow, 0);
-                    MenuItem selectedItem = getMenuItemById(itemId);
-                    if (selectedItem != null) {
-                        showItemDialog(selectedItem);
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(frmEditMenu.this,
-                            "Please select an item to edit",
-                            "No Selection",
-                            JOptionPane.WARNING_MESSAGE);
-                }
-            }
-        });
-
-        btnDeleteItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int selectedRow = tblMenuItems.getSelectedRow();
-                if (selectedRow >= 0) {
-                    int itemId = (int) tableModel.getValueAt(selectedRow, 0);
-                    int confirm = JOptionPane.showConfirmDialog(
-                            frmEditMenu.this,
-                            "Are you sure you want to delete this item?",
-                            "Confirm Delete",
-                            JOptionPane.YES_NO_OPTION);
-
-                    if (confirm == JOptionPane.YES_OPTION) {
-                        if (db.deleteMenuItem(itemId)) {
-                            loadMenuItems(); // Refresh the table
-                            JOptionPane.showMessageDialog(frmEditMenu.this,
-                                    "Item deleted successfully");
-                        } else {
-                            JOptionPane.showMessageDialog(frmEditMenu.this,
-                                    "Failed to delete item",
-                                    "Error",
-                                    JOptionPane.ERROR_MESSAGE);
-                        }
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(frmEditMenu.this,
-                            "Please select an item to delete",
-                            "No Selection",
-                            JOptionPane.WARNING_MESSAGE);
-                }
-            }
-        });
-
-        btnBack.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        });
 
         setVisible(true);
     }
 
-    private void initializeTable() {
+    private void initializeComponents() {
+        // Setup table model
         String[] columnNames = {"ID", "Name", "Price", "Type", "Description"};
         tableModel = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; // Make all cells non-editable
-            }
-
-            @Override
-            public Class<?> getColumnClass(int columnIndex) {
-                if (columnIndex == 0) return Integer.class;
-                if (columnIndex == 2) return Double.class;
-                return String.class;
+                return false;
             }
         };
-
         tblMenuItems.setModel(tableModel);
-        tblMenuItems.getColumnModel().getColumn(0).setPreferredWidth(40);
-        tblMenuItems.getColumnModel().getColumn(1).setPreferredWidth(150);
-        tblMenuItems.getColumnModel().getColumn(2).setPreferredWidth(60);
-        tblMenuItems.getColumnModel().getColumn(3).setPreferredWidth(80);
-        tblMenuItems.getColumnModel().getColumn(4).setPreferredWidth(250);
+        tblMenuItems.getColumnModel().getColumn(0).setMinWidth(0);
+        tblMenuItems.getColumnModel().getColumn(0).setMaxWidth(0);
+
+        // Setup type combo box
+        cmbType.addItem("Food");
+        cmbType.addItem("Drink");
+
+        // Initial visibility for type-specific fields
+        updateTypeSpecificFields();
+    }
+
+    private void setupListeners() {
+        btnAddItem.addActionListener(e -> addMenuItem());
+        btnEditItem.addActionListener(e -> editMenuItem());
+        btnDeleteItem.addActionListener(e -> deleteMenuItem());
+        btnBack.addActionListener(e -> dispose());
+
+        cmbType.addActionListener(e -> updateTypeSpecificFields());
+
+        tblMenuItems.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting() && tblMenuItems.getSelectedRow() != -1) {
+                populateFields(tblMenuItems.getSelectedRow());
+            }
+        });
+    }
+
+    private void updateTypeSpecificFields() {
+        String selectedType = (String) cmbType.getSelectedItem();
+        if ("Food".equals(selectedType)) {
+            txtServingSize.setEnabled(true);
+            chkAlcoholic.setEnabled(false);
+            chkAlcoholic.setSelected(false);
+        } else {
+            txtServingSize.setEnabled(false);
+            txtServingSize.setText("");
+            chkAlcoholic.setEnabled(true);
+        }
     }
 
     private void loadMenuItems() {
-        tableModel.setRowCount(0); // Clear existing data
-
+        tableModel.setRowCount(0);
         List<MenuItem> items = db.getMenuItemsByRestaurantId(restaurantId);
+
         for (MenuItem item : items) {
-            tableModel.addRow(new Object[]{
-                    item.getId(),
-                    item.getName(),
-                    item.getPrice(),
-                    (item instanceof FoodItem) ? "Food" : "Drink",
-                    item.getDescription()
-            });
+            Object[] row = new Object[5];
+            row[0] = item.getId();
+            row[1] = item.getName();
+            row[2] = item.getPrice();
+            row[3] = (item instanceof FoodItem) ? "Food" : "Drink";
+            row[4] = item.getDescription();
+            tableModel.addRow(row);
         }
     }
 
-    private MenuItem getMenuItemById(int id) {
-        List<MenuItem> items = db.getMenuItemsByRestaurantId(restaurantId);
-        for (MenuItem item : items) {
-            if (item.getId() == id) {
-                return item;
+    private void populateFields(int selectedRow) {
+        if (selectedRow >= 0) {
+            int itemId = (int) tableModel.getValueAt(selectedRow, 0);
+            String name = (String) tableModel.getValueAt(selectedRow, 1);
+            double price = (double) tableModel.getValueAt(selectedRow, 2);
+            String type = (String) tableModel.getValueAt(selectedRow, 3);
+            String description = (String) tableModel.getValueAt(selectedRow, 4);
+
+            txtName.setText(name);
+            txtPrice.setText(String.valueOf(price));
+            cmbType.setSelectedItem(type);
+            txtDescription.setText(description);
+
+            // Get the complete item to access type-specific properties
+            List<MenuItem> items = db.getMenuItemsByRestaurantId(restaurantId);
+            for (MenuItem item : items) {
+                if (item.getId() == itemId) {
+                    if (item instanceof FoodItem) {
+                        txtServingSize.setText(((FoodItem) item).getServingSize());
+                        chkAlcoholic.setSelected(false);
+                    } else if (item instanceof DrinkItem) {
+                        txtServingSize.setText("");
+                        chkAlcoholic.setSelected(((DrinkItem) item).isAlcoholic());
+                    }
+                    break;
+                }
             }
         }
-        return null;
     }
 
-    private void showItemDialog(MenuItem item) {
-        JDialog dialog = new JDialog(this, "Menu Item", true);
-        dialog.setSize(400, 350);
-        dialog.setLocationRelativeTo(this);
+    private void addMenuItem() {
+        try {
+            validateInputs();
 
-        JPanel panel = new JPanel(new GridLayout(0, 2, 10, 10));
-        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+            String name = txtName.getText().trim();
+            double price = Double.parseDouble(txtPrice.getText().trim());
+            String type = (String) cmbType.getSelectedItem();
+            String description = txtDescription.getText().trim();
+            String servingSize = null;
+            Boolean isAlcoholic = null;
 
-        JTextField nameField = new JTextField(20);
-        JTextField priceField = new JTextField(10);
-        JTextArea descField = new JTextArea(3, 20);
-        JScrollPane descScroll = new JScrollPane(descField);
-
-        String[] typeOptions = {"Food", "Drink"};
-        JComboBox<String> typeCombo = new JComboBox<>(typeOptions);
-
-        JTextField servingSizeField = new JTextField(10);
-        JCheckBox alcoholicCheck = new JCheckBox("Alcoholic");
-
-        JPanel typeSpecificPanel = new JPanel(new CardLayout());
-        JPanel foodPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        foodPanel.add(new JLabel("Serving Size:"));
-        foodPanel.add(servingSizeField);
-
-        JPanel drinkPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        drinkPanel.add(alcoholicCheck);
-
-        typeSpecificPanel.add(foodPanel, "Food");
-        typeSpecificPanel.add(drinkPanel, "Drink");
-
-        // Set initial values if editing
-        if (item != null) {
-            nameField.setText(item.getName());
-            priceField.setText(String.valueOf(item.getPrice()));
-            descField.setText(item.getDescription());
-
-            if (item instanceof FoodItem) {
-                typeCombo.setSelectedItem("Food");
-                servingSizeField.setText(((FoodItem) item).getServingSize());
-            } else if (item instanceof DrinkItem) {
-                typeCombo.setSelectedItem("Drink");
-                alcoholicCheck.setSelected(((DrinkItem) item).isAlcoholic());
+            if ("Food".equals(type)) {
+                servingSize = txtServingSize.getText().trim();
+            } else {
+                isAlcoholic = chkAlcoholic.isSelected();
             }
+
+            boolean success = db.addMenuItem(restaurantId, name, price, type, description, servingSize, isAlcoholic);
+
+            if (success) {
+                JOptionPane.showMessageDialog(this, "Menu item added successfully");
+                clearFields();
+                loadMenuItems();
+            } else {
+                JOptionPane.showMessageDialog(this, "Failed to add menu item", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Input Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void editMenuItem() {
+        int selectedRow = tblMenuItems.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Please select an item to edit", "Selection Error", JOptionPane.WARNING_MESSAGE);
+            return;
         }
 
-        // Show appropriate panel based on type selection
-        typeCombo.addActionListener(e -> {
-            CardLayout cl = (CardLayout) (typeSpecificPanel.getLayout());
-            cl.show(typeSpecificPanel, (String) typeCombo.getSelectedItem());
-        });
+        try {
+            validateInputs();
 
-        panel.add(new JLabel("Name:"));
-        panel.add(nameField);
-        panel.add(new JLabel("Price:"));
-        panel.add(priceField);
-        panel.add(new JLabel("Type:"));
-        panel.add(typeCombo);
-        panel.add(new JLabel("Type Options:"));
-        panel.add(typeSpecificPanel);
-        panel.add(new JLabel("Description:"));
-        panel.add(descScroll);
+            int itemId = (int) tableModel.getValueAt(selectedRow, 0);
+            String name = txtName.getText().trim();
+            double price = Double.parseDouble(txtPrice.getText().trim());
+            String type = (String) cmbType.getSelectedItem();
+            String description = txtDescription.getText().trim();
+            String servingSize = null;
+            Boolean isAlcoholic = null;
 
-        JButton saveButton = new JButton("Save");
-        JButton cancelButton = new JButton("Cancel");
-
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.add(saveButton);
-        buttonPanel.add(cancelButton);
-
-        saveButton.addActionListener(e -> {
-            try {
-                String name = nameField.getText().trim();
-                double price = Double.parseDouble(priceField.getText().trim());
-                String type = (String) typeCombo.getSelectedItem();
-                String description = descField.getText().trim();
-
-                if (name.isEmpty()) {
-                    JOptionPane.showMessageDialog(dialog, "Name cannot be empty");
-                    return;
-                }
-
-                boolean success;
-                if (item == null) {
-                    // Adding new item
-                    success = db.addMenuItem(
-                            restaurantId,
-                            name,
-                            price,
-                            type,
-                            description,
-                            type.equals("Food") ? servingSizeField.getText().trim() : null,
-                            type.equals("Drink") ? alcoholicCheck.isSelected() : null
-                    );
-                } else {
-                    // Updating existing item
-                    success = db.updateMenuItem(
-                            item.getId(),
-                            name,
-                            price,
-                            type,
-                            description,
-                            type.equals("Food") ? servingSizeField.getText().trim() : null,
-                            type.equals("Drink") ? alcoholicCheck.isSelected() : null
-                    );
-                }
-
-                if (success) {
-                    loadMenuItems();
-                    dialog.dispose();
-                } else {
-                    JOptionPane.showMessageDialog(dialog,
-                            "Failed to save item",
-                            "Error",
-                            JOptionPane.ERROR_MESSAGE);
-                }
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(dialog,
-                        "Please enter a valid price",
-                        "Invalid Input",
-                        JOptionPane.ERROR_MESSAGE);
+            if ("Food".equals(type)) {
+                servingSize = txtServingSize.getText().trim();
+            } else {
+                isAlcoholic = chkAlcoholic.isSelected();
             }
-        });
 
-        cancelButton.addActionListener(e -> dialog.dispose());
+            boolean success = db.updateMenuItem(itemId, name, price, type, description, servingSize, isAlcoholic);
 
-        dialog.setLayout(new BorderLayout());
-        dialog.add(panel, BorderLayout.CENTER);
-        dialog.add(buttonPanel, BorderLayout.SOUTH);
-
-        // Set initial view based on current type selection
-        CardLayout cl = (CardLayout) (typeSpecificPanel.getLayout());
-        cl.show(typeSpecificPanel, (String) typeCombo.getSelectedItem());
-
-        dialog.setVisible(true);
+            if (success) {
+                JOptionPane.showMessageDialog(this, "Menu item updated successfully");
+                clearFields();
+                loadMenuItems();
+            } else {
+                JOptionPane.showMessageDialog(this, "Failed to update menu item", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Input Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
-    // Default constructor that shows error message
-    public frmEditMenu() {
-        JOptionPane.showMessageDialog(null,
-                "No restaurant ID provided. Please login as restaurant staff.",
-                "Error",
-                JOptionPane.ERROR_MESSAGE);
-        dispose();
+    private void deleteMenuItem() {
+        int selectedRow = tblMenuItems.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Please select an item to delete", "Selection Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int itemId = (int) tableModel.getValueAt(selectedRow, 0);
+        String itemName = (String) tableModel.getValueAt(selectedRow, 1);
+
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "Are you sure you want to delete " + itemName + "?",
+                "Confirm Deletion", JOptionPane.YES_NO_OPTION);
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            boolean success = db.deleteMenuItem(itemId);
+
+            if (success) {
+                JOptionPane.showMessageDialog(this, "Menu item deleted successfully");
+                clearFields();
+                loadMenuItems();
+            } else {
+                JOptionPane.showMessageDialog(this, "Failed to delete menu item", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private void validateInputs() throws Exception {
+        String name = txtName.getText().trim();
+        String priceText = txtPrice.getText().trim();
+        String type = (String) cmbType.getSelectedItem();
+
+        if (name.isEmpty()) {
+            throw new Exception("Name cannot be empty");
+        }
+
+        try {
+            double price = Double.parseDouble(priceText);
+            if (price <= 0) {
+                throw new Exception("Price must be greater than zero");
+            }
+        } catch (NumberFormatException e) {
+            throw new Exception("Please enter a valid price");
+        }
+
+        if ("Food".equals(type) && txtServingSize.getText().trim().isEmpty()) {
+            throw new Exception("Serving size is required for food items");
+        }
+    }
+
+    private void clearFields() {
+        txtName.setText("");
+        txtPrice.setText("");
+        txtDescription.setText("");
+        txtServingSize.setText("");
+        chkAlcoholic.setSelected(false);
+        cmbType.setSelectedIndex(0);
+        tblMenuItems.clearSelection();
     }
 
     public static void main(String[] args) {

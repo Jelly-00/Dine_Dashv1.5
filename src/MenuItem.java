@@ -17,10 +17,6 @@ public abstract class MenuItem {
         return id;
     }
 
-    public int getMenuId() {
-        return menuId;
-    }
-
     public String getName() {
         return name;
     }

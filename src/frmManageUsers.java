@@ -33,6 +33,29 @@ public class frmManageUsers extends JFrame {
         this.setVisible(true);
 
         loadUserData();
+//LISTENER TO POPULATE TEXT FIELDS WHEN A ROW IS SELECTED
+        tblUsers.getSelectionModel().addListSelectionListener(event -> {
+            if (!event.getValueIsAdjusting() && tblUsers.getSelectedRow() != -1) {
+                int selectedRow = tblUsers.getSelectedRow();
+
+
+                int id = (int) tblUsers.getValueAt(selectedRow, 0);
+                String username = (String) tblUsers.getValueAt(selectedRow, 1);
+                String firstName = (String) tblUsers.getValueAt(selectedRow, 2);
+                String lastName = (String) tblUsers.getValueAt(selectedRow, 3);
+                String email = (String) tblUsers.getValueAt(selectedRow, 4);
+                String role = (String) tblUsers.getValueAt(selectedRow, 5);
+
+
+                txtUserName.setText(username);
+                txtFirstName.setText(firstName);
+                txtLastName.setText(lastName);
+                txtEmail.setText(email);
+                cmbRole.setSelectedItem(role);
+            }
+        });
+
+
         btnAddUser.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -129,14 +152,15 @@ public class frmManageUsers extends JFrame {
         });
     }
 
-    public void loadUserData() {
+    private void loadUserData() {
+        //LOADS USER DATA
         DefaultTableModel model = new DefaultTableModel();
-        model.setColumnIdentifiers(new String[]{"ID", "Username", "First Name", "Last Name", "Email", "Password","Role"});
+        model.setColumnIdentifiers(new String[]{"ID", "Username", "First Name", "Last Name", "Email", "Role"});
 
         try {
             DBAccess db = DBAccess.getInstance();
             List<User> users = db.getAllUsers();
-            model.setRowCount(0); //  Intellisense recommended this
+            model.setRowCount(0);
 
             for (User user : users) {
                 model.addRow(new Object[]{
@@ -145,7 +169,6 @@ public class frmManageUsers extends JFrame {
                         user.getFirstName(),
                         user.getLastName(),
                         user.getEmail(),
-                        user.getPassword(),
                         user.getRole()
                 });
             }

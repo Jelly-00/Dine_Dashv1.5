@@ -46,6 +46,13 @@ public class frmAdminDashboard extends JFrame {
             }
         });
 
+        btnAssignStaff.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new frmAssignStaff();
+            }
+        });
+
         setVisible(true);
     }
 
@@ -100,6 +107,7 @@ public class frmAdminDashboard extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(600, 400);
         setLocationRelativeTo(null);
+        setVisible(true);
 
         lblWelcome.setText("Welcome, Admin");
 
@@ -120,7 +128,7 @@ public class frmAdminDashboard extends JFrame {
             }
         });
 
-        setVisible(true);
+
         btnAssignStaff.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
