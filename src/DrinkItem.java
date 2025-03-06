@@ -9,4 +9,8 @@ public class DrinkItem extends MenuItem {
     public boolean isAlcoholic() {
         return isAlcoholic;
     }
+
+    public void setAlcoholic(boolean alcoholic) {
+        isAlcoholic = alcoholic;
+    }
 }

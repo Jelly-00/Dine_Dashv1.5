@@ -47,10 +47,9 @@ public class frmLogin extends JFrame {
         if (isAuthenticated) {
             JOptionPane.showMessageDialog(this, "Login successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
             dispose();
-            User loggedInUser = db.getUser(username);
-            JOptionPane.showMessageDialog(this, "Welcome, " + loggedInUser.getFirstName() + " " + loggedInUser.getLastName() + "!", "Welcome", JOptionPane.INFORMATION_MESSAGE);
-            new frmHomePage(loggedInUser);
-           // new frmHomePage(loggedInUser);
+            User loggedUser = db.getUser(username);
+            JOptionPane.showMessageDialog(this, "Welcome, " + loggedUser.getFirstName() + " " + loggedUser.getLastName() + "!", "Welcome", JOptionPane.INFORMATION_MESSAGE);
+            new frmHomePage(loggedUser);
         } else {
             JOptionPane.showMessageDialog(this, "Invalid username or password.", "Error", JOptionPane.ERROR_MESSAGE);
         }

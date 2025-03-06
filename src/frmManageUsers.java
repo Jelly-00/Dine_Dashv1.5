@@ -57,8 +57,6 @@ public class frmManageUsers extends JFrame {
 
                 Customer newUser = new Customer(username, firstName, lastName, email, password);
 
-
-
                 if (dbAccess.addUser(newUser, "customer")) {
                     JOptionPane.showMessageDialog(null, "User added successfully");
                     loadUserData();
@@ -67,7 +65,6 @@ public class frmManageUsers extends JFrame {
                 }
             }
         });
-
 
         btnEditUser.addActionListener(new ActionListener() {
             @Override

@@ -1,5 +1,4 @@
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -9,14 +8,14 @@ public class frmChangePassword extends JFrame {
     private JPasswordField txtNewPassword;
     private JPasswordField txtConfirmPassword;
     private JButton btnChangePassword;
-    private User loggedInUser;
+    private User loggedUser;
     private JLabel lblCurrent;
     private JLabel lblNew;
     private JLabel lblConfirm;
 
 
     public frmChangePassword(User user) {
-        this.loggedInUser = user;
+        this.loggedUser = user;
 
         setTitle("Change Password");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -49,12 +48,12 @@ public class frmChangePassword extends JFrame {
         }
 
         DBAccess db = DBAccess.getInstance();
-        if (!db.authenticateUser(loggedInUser.getUserName(), currentPassword)) {
+        if (!db.authenticateUser(loggedUser.getUserName(), currentPassword)) {
             JOptionPane.showMessageDialog(this, "Current password is incorrect", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        if (db.updateUserPassword(loggedInUser.getId(), newPassword)) {
+        if (db.updateUserPassword(loggedUser.getId(), newPassword)) {
             JOptionPane.showMessageDialog(this, "Password changed successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
             dispose();
         } else {

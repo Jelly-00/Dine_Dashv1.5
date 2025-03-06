@@ -9,4 +9,8 @@ public class FoodItem extends MenuItem {
     public String getServingSize() {
         return servingSize;
     }
+
+    public void setServingSize(String servingSize) {
+        this.servingSize = servingSize;
+    }
 }

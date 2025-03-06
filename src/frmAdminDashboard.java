@@ -10,6 +10,7 @@ public class frmAdminDashboard extends JFrame {
     private JButton btnManageRestuarants;
     private JLabel lblUserCount;
     private JLabel lblRestaurantCount;
+    private JButton btnAssignStaff;
     private User loggedUser;
 
     public frmAdminDashboard(User user) {
@@ -120,6 +121,12 @@ public class frmAdminDashboard extends JFrame {
         });
 
         setVisible(true);
+        btnAssignStaff.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new frmAssignStaff();
+            }
+        });
     }
 
     public static void main(String[] args) {
